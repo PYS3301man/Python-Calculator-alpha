@@ -1,0 +1,11 @@
+Python-Calculator-alpha 코드에 대한 문서
+------------
+현재 버전 목록:
+Alpha ver:
+Calculator_alpha_ver_0
+Calculator_alpha_ver_1
+Calculator_alpha_ver_2
+------------
+다음 버전 목표:
+Calculator_alpha_ver_3:
+    버그 수정 및 함수 변경 간편화
