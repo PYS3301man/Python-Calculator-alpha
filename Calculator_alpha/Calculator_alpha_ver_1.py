@@ -1,4 +1,4 @@
-#Calculator alpha ver.0 (CGPT helped TUI)
+#Calculator alpha ver.1 (CGPT helped TUI)
 
 import math, time
 

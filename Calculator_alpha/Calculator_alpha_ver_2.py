@@ -1,12 +1,12 @@
-#Calculator alpha ver.0 (CGPT helped TUI)
-#Pull Test
+#Calculator alpha ver.2 (CGPT helped TUI)
+
 import math, time
 
 Error_L = {
     'VL-ER:InptVL':'에러-값:입력값 오류',
     'VL-ER:OtptVL':'에러-값:출력값 오류'
     }
-Cclted = []
+Cclted = ['1']
 
 Exced = 0
 
@@ -40,8 +40,8 @@ def Cclted_Screen():
     global Cclted, Exced
     LnCd = len(Cclted)
     HwMc = 0
-    print('_' * 10)
     if Exced == 0:
+        print('_' * 10)
         print(f'''[계산 기록 보기]
 원하시는 계산 기록의 양을 입력해 주세요.
 [현재 {LnCd}개 의 기록이 있습니다.]
@@ -53,14 +53,25 @@ def Cclted_Screen():
             Exced = 0
             return 'Main_Screen'
         else:
-            HwMc = int(input(f'기록량 입력:'))
+            try: HwMc = int(input(f'기록량 입력:'))
+            except:
+                print('###'*3, Error_L['VL-ER:InptVL'], '###'*3)
+                Exced = 1
+                return 'Cclted_Screen'
+    if Exced == 1:
+        try: HwMc = int(input(f'기록량 입력:'))
+        except:
+            print('###'*3, Error_L['VL-ER:InptVL'], '###'*3)
+            Exced = 1
+            return 'Cclted_Screen'
     if HwMc == 0:
         Exced = 0
         return 'Main_Screen'
     elif HwMc <= LnCd:
-        for i in range(100):
+        for i in range(LnCd):
             print(f'{i+1}. [{Cclted[i]}]')
-        Esc = input('메인메뉴로 돌아가기: ')
+        input('메인메뉴로 돌아가기: ')
+        Exced = 0
         return 'Main_Screen'
     elif HwMc > LnCd or HwMc >= 100:
         print('모든 기록(최대 100)을 출력합니다.')
@@ -74,13 +85,12 @@ def Cclted_Screen():
         for i, val in enumerate(Cclted[:100]):
             print(f'{i+1}. [{val}]')
         print('--------')
-        Esc = input('메인메뉴로 돌아가기: ')
-        return 'Main_Screen'
-
-    elif HwMc == 0:
+        input('메인메뉴로 돌아가기: ')
+        Exced = 0
         return 'Main_Screen'
     else :
-        print('###' * 3, Error_L['VL-ER:InptVL'], '###' * 3)
+        print('###'*3, Error_L['VL-ER:InptVL'], '###'*3)
+        Exced = 0
         return 'Main_Screen'
 
 #사칙연산
