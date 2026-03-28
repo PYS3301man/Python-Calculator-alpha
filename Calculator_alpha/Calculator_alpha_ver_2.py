@@ -6,7 +6,7 @@ Error_L = {
     'VL-ER:InptVL':'에러-값:입력값 오류',
     'VL-ER:OtptVL':'에러-값:출력값 오류'
     }
-Cclted = ['1']
+Cclted = []
 
 Exced = 0
 
@@ -260,10 +260,4 @@ screens = {
 #실행 루프
 
 while True:
-    #미완성 부분 재실행 예외처리
-#    try:
     current_screen = screens[current_screen]()
-
-#    except:
-#        current_screen = Main_Screen()
-#        continue
