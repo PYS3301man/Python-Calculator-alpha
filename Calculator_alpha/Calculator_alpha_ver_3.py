@@ -1,4 +1,4 @@
-#Calculator alpha ver.2 (CGPT helped TUI)
+#Calculator alpha ver.3 (CGPT helped TUI)
 
 import math, time
 
@@ -9,18 +9,19 @@ Error_L = {
 Cclted = []
 
 Exced = 0
+ExcedC = 0
+ExcedF, ExcedS, ExcedT = 0, 0, 0
 
 #메인 스크린
 def Main_Screen():
-    global Exced, Cclted
+    global Exced, Cclted, LnCd
+    LnCd = len(Cclted)
     if Exced == 0:
         print("==" * 10)
-        print("Calculator alpha ver.2")
+        print("Calculator alpha ver.3")
         print('''1. 사칙연산 | 2. 간단한 수학적 계산
 0. 계산 기록 보기''')
-        select = input("번호를 입력하여 원하는 계산 시작: ")
-    elif Exced == 1:
-        select = input("번호를 입력하여 원하는 계산 시작: ")
+    select = input("번호를 입력하여 원하는 계산 시작: ")
     if select == '1':
         Exced = 0
         return 'FFAO'
@@ -30,6 +31,32 @@ def Main_Screen():
     elif select == '0':
         Exced = 0
         return 'Cclted_Screen'
+    if select == '/Cclted+10':
+        for i in range(10):
+            Cclted.append('1')
+        print(f'[System]: "{select}" Command Successfully Applied!')
+        Exced = 1
+        return 'Main_Screen'
+    if select == '/Cclted-10':
+        if LnCd >= 10:
+            for i in range(10):
+                del Cclted[-1]
+            print(f'[System]: "{select}" Command Successfully Applied!')
+        elif LnCd < 10:
+            print(f'[System]: "{select}" Command Failed!')
+        Exced = 1
+        return 'Main_Screen'
+    if select == '/Cclted+100':
+        for i in range(100):
+            Cclted.append('1')
+        print(f'[System]: "{select}" Command Successfully Applied!')
+        Exced = 1
+        return 'Main_Screen'
+    if select == '/Cclted-Clr':
+        Cclted.clear()
+        print(f'[System]: "{select}" Command Successfully Applied!')
+        Exced = 1
+        return 'Main_Screen'
     else :
         print('###'*3, Error_L['VL-ER:InptVL'], '###'*3)
         Exced = 1
@@ -52,23 +79,16 @@ def Cclted_Screen():
             input('아무 키나 입력하여 메인 메뉴로 돌아가기: ')
             Exced = 0
             return 'Main_Screen'
-        else:
-            try: HwMc = int(input(f'기록량 입력:'))
-            except:
-                print('###'*3, Error_L['VL-ER:InptVL'], '###'*3)
-                Exced = 1
-                return 'Cclted_Screen'
-    if Exced == 1:
-        try: HwMc = int(input(f'기록량 입력:'))
-        except:
-            print('###'*3, Error_L['VL-ER:InptVL'], '###'*3)
-            Exced = 1
-            return 'Cclted_Screen'
+    try: HwMc = int(input('출력할 기록량(최대 100) 입력:'))
+    except:
+        print('###'*3, Error_L['VL-ER:InptVL'], '###'*3)
+        Exced = 1
+        return 'Cclted_Screen'
     if HwMc == 0:
         Exced = 0
         return 'Main_Screen'
     elif HwMc <= LnCd:
-        for i in range(LnCd):
+        for i in range(HwMc):
             print(f'{i+1}. [{Cclted[i]}]')
         input('메인메뉴로 돌아가기: ')
         Exced = 0
@@ -95,54 +115,75 @@ def Cclted_Screen():
 
 #사칙연산
 def FFAO():
-    global Cclted
-    print("--" * 10)
-    print('''사칙연산
-수 입력시 항상 시작부분이 +, - 또는 정수로 시작하게 입력해 주세요''')
-    print('[M]을 입력할 경우, 메인 메뉴로 돌아갑니다.')
+    global Cclted, Exced, ExcedF, ExcedS, ExcedT
     PstNum_L = ['+', '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-    PstOpr_L = ['+', '-', '*', '/']
     Nu1 = 0
     Nu2 = 0
     Rslt = 0
-    FiNu = input("첫번째 정수 입력: ")
-    if FiNu == 'M' or FiNu == 'm':
-        return 'Main_Screen'
-    if FiNu[0] not in PstNum_L:
-        print('###' * 3, Error_L['VL-ER:InptVL'], '###' * 3)
-        return 'FFAO'
-    elif FiNu[0] in PstNum_L:
-        Nu1 = int(FiNu)
-    
-    Oper = input("연산자(+, -, *, / 중 하나) 입력: ")
-    list(Oper)
-    for i in range(len(Oper)):
-        if Oper[i] == '+':
-            Oper = '+'
-            break
-        elif Oper[i] == '-':
-            Oper = '-'
-            break
-        elif Oper[i] == '*':
-            Oper = '*'
-            break
-        elif Oper[i] == '/':
-            Oper = '/'
-            break
+    if Exced == 0:
+        print("--" * 10)
+        print('''사칙연산
+수 입력시 항상 시작부분이 +, - 또는 정수로 시작하게 입력해 주세요''')
+        print('[M]을 입력할 경우, 메인 메뉴로 돌아갑니다.')
+#첫번째 정수
+    while ExcedF == 0:
+        FiNu = input("첫번째 정수 입력: ")
+        if FiNu == 'M' or FiNu == 'm':
+            Exced, ExcedF, ExcedS, ExcedT = 0, 0, 0, 0
+            return 'Main_Screen'
         else:
-            print('###' * 3, Error_L['VL-ER:InptVL'], '###' * 3)
-    
-    SeNu = input("두번째 정수 입력: ")
-    if SeNu[0] not in PstNum_L:
-        print('###' * 3, Error_L['VL-ER:InptVL'], '###' * 3)
-        return 'FFAO'
-    elif SeNu[0] in PstNum_L:
-        Nu2 = int(SeNu)
-
+            try: Nu1 = int(FiNu)
+            except:
+                print('###'*3, Error_L['VL-ER:InptVL'], '###'*3)
+                Exced = 1
+                ExcedF = 0
+                return 'FFAO'
+            ExcedF = 1
+#연산자
+    while ExcedS == 0:
+        Oper = input("연산자(+, -, *, / 중 하나) 입력: ")
+        OperLs = list(Oper)
+        if Oper == 'M' or Oper == 'm':
+            Exced, ExcedF, ExcedS, ExcedT = 0, 0, 0, 0
+            return 'Main_Screen'
+        else:
+            for i in range(len(OperLs)):
+                if OperLs[i] == '+':
+                    Oper = '+'
+                    ExcedS = 1
+                    break
+                elif OperLs[i] == '-':
+                    Oper = '-'
+                    ExcedS = 1
+                    break
+                elif OperLs[i] == '*':
+                    Oper = '*'
+                    ExcedS = 1
+                    break
+                elif OperLs[i] == '/':
+                    Oper = '/'
+                    ExcedS = 1
+                    break
+                else:
+                    print('###'*3, Error_L['VL-ER:InptVL'], '###'*3)
+                    ExcedS = 0
+#두번째 정수
+    while ExcedT == 0:
+        SeNu = input("두번째 정수 입력: ")
+        if SeNu == 'M' or SeNu == 'm':
+            Exced, ExcedF, ExcedS, ExcedT = 0, 0, 0, 0
+            return 'Main_Screen'
+        else:
+            try: Nu2 = int(SeNu)
+            except:
+                print('###'*3, Error_L['VL-ER:InptVL'], '###'*3)
+                Exced, ExcedF, ExcedS, ExcedT = 0, 1, 1, 0
+                return 'FFAO'
+            ExcedT = 1
     if Oper == '+':
-        Rslt = int(Nu1) + int(Nu2)
+        Rslt = Nu1 + Nu2
     elif Oper == '-':
-        Rslt = int(Nu1) - int(Nu2)
+        Rslt = Nu1 - Nu2
     elif Oper == '*':
         Rslt = float(Nu1) * float(Nu2)
     elif Oper == '/':
@@ -152,11 +193,14 @@ def FFAO():
     Cclted.append(Rslt)
     AskRty = input("0.돌아가기 | 1.계속하기 :")
     if AskRty == '1':
+        Exced, ExcedF, ExcedS, ExcedT = 0, 0, 0, 0
         return 'FFAO'
     elif AskRty == '0':
+        Exced, ExcedF, ExcedS, ExcedT = 0, 0, 0, 0
         return 'Main_Screen'
     else:
         print('###' * 3, Error_L['VL-ER:InptVL'], '###' * 3)
+        Exced, ExcedF, ExcedS, ExcedT = 0, 0, 0, 0
         return 'Main_Screen'
 
 #SMC_1 [제곱]
